@@ -1,0 +1,22 @@
+{
+	"name": "react-json-friendly-viewer-workspace",
+	"private": true,
+	"version": "1.0.0",
+	"description": "",
+	"keywords": [],
+	"author": {
+		"name": "Malcolm Kee",
+		"email": "malcolm.keeweesiong@gmail.com"
+	},
+	"license": "MIT",
+	"scripts": {
+		"build": "pnpm -r run build",
+		"dev": "pnpm -r --stream --parallel run dev",
+		"clean": "pnpm -r run clean"
+	},
+	"devDependencies": {
+		"netlify-cli": "^10.11.1",
+		"prettier": "^2.7.1",
+		"rimraf": "^3.0.2"
+	}
+}
