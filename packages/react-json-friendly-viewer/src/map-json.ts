@@ -1,6 +1,6 @@
 import { titleCase } from 'title-case';
 import { isEmptyObject, isNil, isPrimitive } from './lib/type-guard';
-import { JSONValue } from './types';
+import { JSONValue, ValueFormatter } from './types';
 import * as React from 'react';
 
 export type JsonNode = {
@@ -9,7 +9,10 @@ export type JsonNode = {
 	index: number;
 	level: number;
 	path: string;
-	elementRef: React.RefObject<HTMLDivElement>;
+	elementRef: React.MutableRefObject<{
+		element: HTMLDivElement;
+		isButton: boolean;
+	} | null>;
 	expanded?: boolean;
 	children?: Array<JsonNode>;
 };
@@ -27,11 +30,21 @@ type JsonObjectOrArray =
 
 export const formatJson = (
 	value: JSONValue,
-	expandedPaths: string[]
+	expandedPaths: string[],
+	{
+		formatter: providedFormatter = {},
+	}: {
+		formatter?: Partial<ValueFormatter>;
+	} = {}
 ): JsonNode[] => {
 	if (isValue(value)) {
 		return [];
 	}
+
+	const formatter = {
+		...defaultFormatter,
+		...providedFormatter,
+	};
 
 	const result: JsonNode[] = [];
 	let itemIndex = 0;
@@ -47,7 +60,7 @@ export const formatJson = (
 				const label = `Item ${index + 1}`;
 				const path = `${parentPath}.${label}`;
 
-				const parsed = parseValue(item);
+				const parsed = parseValue(item, formatter);
 
 				if (parsed.hasMore) {
 					const expanded = expandedPaths.includes(path);
@@ -81,7 +94,7 @@ export const formatJson = (
 				const label = prettifyLabel(key);
 				const path = `${parentPath}.${label}`;
 
-				const parsed = parseValue(val);
+				const parsed = parseValue(val, formatter);
 
 				if (parsed.hasMore) {
 					const expanded = expandedPaths.includes(path);
@@ -151,8 +164,15 @@ export const prettifyLabel = (camelCaseText: string): string => {
 	);
 };
 
+const defaultFormatter: ValueFormatter = {
+	string: (value) => value,
+	number: (value) => String(value),
+	boolean: (value) => titleCase(String(value)),
+};
+
 const parseValue = (
-	value: JSONValue
+	value: JSONValue,
+	formatter: ValueFormatter
 ): {
 	value: string | number;
 	hasMore: boolean;
@@ -186,15 +206,15 @@ const parseValue = (
 		};
 	}
 
-	const valType = typeof value;
-
-	switch (valType) {
+	switch (typeof value) {
 		case 'string':
+			return { value: formatter.string(value), hasMore: false };
+
 		case 'number':
-			return { value: value as string | number, hasMore: false };
+			return { value: formatter.number(value), hasMore: false };
 
 		case 'boolean':
-			return { value: titleCase(String(value)), hasMore: false };
+			return { value: formatter.boolean(value), hasMore: false };
 
 		case 'object':
 			return { value: '', hasMore: true };

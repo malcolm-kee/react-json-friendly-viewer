@@ -49,6 +49,5 @@ globalStyle(`${themeClass} *`, {
 globalStyle(`${themeClass} button`, {
 	WebkitAppearance: 'button',
 	appearance: 'button',
-	backgroundColor: 'transparent',
 	backgroundImage: 'none',
 });

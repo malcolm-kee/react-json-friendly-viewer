@@ -8,9 +8,10 @@
 		"clean": "rimraf dist"
 	},
 	"dependencies": {
+		"date-fns": "^2.29.1",
 		"react": "^18.2.0",
-		"react-json-friendly-viewer": "workspace:*",
-		"react-dom": "^18.2.0"
+		"react-dom": "^18.2.0",
+		"react-json-friendly-viewer": "workspace:*"
 	},
 	"devDependencies": {
 		"@types/react": "^18.0.15",

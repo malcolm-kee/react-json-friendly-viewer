@@ -144,3 +144,21 @@ export const prettyCellByType = styleVariants({
 		lineHeight: '1.375',
 	},
 });
+
+export const connectorWrapper = styleVariants({
+	base: {
+		position: 'absolute',
+		top: spacing[9],
+		pointerEvents: 'none',
+	},
+	root: {
+		left: 0,
+	},
+	nonRoot: {
+		left: spacing[2],
+	},
+});
+
+export const connector = style({
+	color: vars.colors['gray-400'],
+});
