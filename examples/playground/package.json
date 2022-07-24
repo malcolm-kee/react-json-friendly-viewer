@@ -8,15 +8,16 @@
 		"clean": "rimraf dist"
 	},
 	"dependencies": {
+		"date-fns": "^2.29.1",
 		"react": "^18.2.0",
-		"react-json-friendly-viewer": "workspace:*",
-		"react-dom": "^18.2.0"
+		"react-dom": "^18.2.0",
+		"react-json-friendly-viewer": "workspace:*"
 	},
 	"devDependencies": {
 		"@types/react": "^18.0.15",
 		"@types/react-dom": "^18.0.6",
-		"@vitejs/plugin-react": "^2.0.0",
+		"@vitejs/plugin-react": "^1.3.2",
 		"typescript": "^4.7.4",
-		"vite": "^3.0.2"
+		"vite": "^2.9.14"
 	}
 }

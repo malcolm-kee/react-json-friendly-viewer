@@ -14,7 +14,8 @@
 		"skipLibCheck": true,
 		"esModuleInterop": true,
 		"noImplicitAny": true,
-		"noUnusedLocals": true
+		"noUnusedLocals": true,
+		"outDir": "dist"
 	},
 	"include": ["src"]
 }
