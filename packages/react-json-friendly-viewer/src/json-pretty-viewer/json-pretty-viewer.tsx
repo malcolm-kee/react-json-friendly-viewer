@@ -1,10 +1,11 @@
-import { noop, useForceUpdate } from '@reach/utils';
 import { clsx as cx } from 'clsx';
 import * as React from 'react';
 import { position, srOnly } from '../helper.css';
 import { createNamedContext } from '../lib/create-named-context';
+import { noop } from '../lib/fn-lib';
 import { ToggleIcon } from '../lib/toggle-icon';
 import { isDefined, isNil } from '../lib/type-guard';
+import { useForceUpdate } from '../lib/use-force-update';
 import { formatJson, JsonNode } from '../map-json';
 import { themeClass } from '../theme.css';
 import type * as types from '../types';

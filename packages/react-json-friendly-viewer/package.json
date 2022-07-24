@@ -50,8 +50,6 @@
 		"docs"
 	],
 	"dependencies": {
-		"@reach/descendants": "^0.17.0",
-		"@reach/utils": "^0.17.0",
 		"clsx": "^1.2.1",
 		"title-case": "^3.0.3"
 	}
