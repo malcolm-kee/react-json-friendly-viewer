@@ -15,6 +15,11 @@
 		},
 		"./style.css": "./dist/style.css"
 	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/malcolm-kee/react-json-friendly-viewer.git",
+		"directory": "packages/react-json-friendly-viewer"
+	},
 	"scripts": {
 		"build": "tsc --noEmit && vite build",
 		"dev": "vite build --watch",
