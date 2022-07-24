@@ -2,6 +2,8 @@
 
 Beautifully display your JSON data for everyone.
 
+[Demo](https://react-json-friendly-viewer.netlify.app/)
+
 ```bash
 npm install react-json-friendly-viewer
 ```
@@ -17,7 +19,6 @@ import 'react-json-friendly-viewer/style.css';
 <JsonPrettyViewer
 	json={{
 		name: 'react-json-friendly-viewer',
-		version: 'unknown',
 		private: false,
 		changes: 1000,
 		dependencies: {
@@ -27,11 +28,15 @@ import 'react-json-friendly-viewer/style.css';
 		hobbies: ['reading', 'eating'],
 		experiences: [
 			{
-				from: '2013',
-				to: '2015',
 				job: 'janitor',
+				projects: [
+					{
+						venue: 'National Museum',
+					},
+				],
 			},
 		],
+		referrer: null,
 	}}
 />;
 ```
