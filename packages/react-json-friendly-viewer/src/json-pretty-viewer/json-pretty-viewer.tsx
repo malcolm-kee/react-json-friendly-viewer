@@ -120,7 +120,7 @@ const PrettyJsonNode = ({
 				<div className={clsx(styles.flex, styles.padByLevel[node.level])}>
 					<PrettyCell
 						className={styles.toggleCell}
-						type="value"
+						type="label"
 						aria-colspan={2}
 					>
 						<button
