@@ -15,6 +15,7 @@ export const ToggleIcon = React.forwardRef<
 			width={24}
 			height={24}
 			stroke="currentColor"
+			aria-hidden
 			{...props}
 			ref={ref}
 		>

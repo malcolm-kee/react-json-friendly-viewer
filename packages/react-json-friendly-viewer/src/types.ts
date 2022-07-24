@@ -21,6 +21,8 @@ export type FieldData =
 export interface Formatter {
 	boolean: (value: boolean) => string;
 	string: (value: string) => string;
+	none: () => string;
 	number: (value: number) => string;
-	field: (data: FieldData) => string;
+	prop: (name: string, parentName?: string) => string;
+	arrayItem: (index: number, parentName?: string) => string;
 }

@@ -8,13 +8,6 @@ export const flex = style({
 	display: 'flex',
 });
 
-export const flexCenter = style([
-	flex,
-	{
-		alignItems: 'center',
-	},
-]);
-
 export const tableHeading = style({
 	paddingLeft: vars.spacing[7],
 });
@@ -35,9 +28,20 @@ export const stripeRow = styleVariants({
 	},
 });
 
-export const toggleBtn = style({
-	cursor: 'pointer',
-});
+export const toggleBtn = style([
+	flex,
+	{
+		fontFamily: 'inherit',
+		fontSize: 'inherit',
+		color: 'inherit',
+		cursor: 'pointer',
+		alignItems: 'center',
+		backgroundColor: 'inherit',
+		width: '100%',
+		paddingBlock: '8px',
+		marginBlock: `-8px`,
+	},
+]);
 
 export const toggleIconWrapper = styleVariants({
 	default: {
@@ -110,6 +114,7 @@ export const prettyCellByType = styleVariants({
 	label: {
 		width: spacing[36],
 		paddingRight: spacing[4],
+		flexShrink: 0,
 		'@media': {
 			[media.md]: {
 				width: spacing[72],
@@ -139,9 +144,9 @@ export const prettyCellByType = styleVariants({
 	},
 	nonHeading: {
 		paddingBlock: spacing[4],
-		whiteSpace: 'nowrap',
 		fontSize: vars.fontSize.sm,
 		lineHeight: '1.375',
+		minWidth: 0,
 	},
 });
 

@@ -1,4 +1,5 @@
-import { clsx as cx } from 'clsx';
+import { useId } from '@radix-ui/react-id';
+import { clsx } from 'clsx';
 import * as React from 'react';
 import { position, srOnly } from '../helper.css';
 import { createNamedContext } from '../lib/create-named-context';
@@ -11,20 +12,31 @@ import { themeClass } from '../theme.css';
 import type * as types from '../types';
 import * as styles from './json-pretty-viewer.css';
 
-export interface JsonPrettyViewerProps {
+export interface JsonPrettyViewerProps
+	extends React.ComponentPropsWithoutRef<'div'> {
 	json: any;
 	formatter?: Partial<types.Formatter>;
+	fieldLabel?: string;
+	valueLabel?: string;
+	mergePrimitiveArray?: boolean;
+	renderValue?: (value: string) => React.ReactNode;
 }
 
 export const JsonPrettyViewer = ({
 	json,
 	formatter,
+	mergePrimitiveArray = true,
+	renderValue = (val) => val,
+	fieldLabel = 'FIELD',
+	valueLabel = 'VALUE',
+	...divProps
 }: JsonPrettyViewerProps) => {
+	const ensuredId = useId(divProps.id);
 	const rerender = useForceUpdate();
 	const [pathsToExpand, dispatch] = React.useReducer(stateReducer, []);
 	const formattedJson = React.useMemo(
-		() => formatJson(json, pathsToExpand, { formatter }),
-		[json, pathsToExpand, formatter]
+		() => formatJson(json, pathsToExpand, { formatter, mergePrimitiveArray }),
+		[json, pathsToExpand, formatter, mergePrimitiveArray]
 	);
 
 	if (!json) {
@@ -34,31 +46,53 @@ export const JsonPrettyViewer = ({
 	return (
 		<RerenderContext.Provider value={rerender}>
 			<DispatchToggleContext.Provider value={dispatch}>
-				<div className={themeClass}>
-					<div className={styles.flex}>
-						<PrettyCell className={styles.tableHeading} type="label" heading>
-							FIELD
-						</PrettyCell>
-						<PrettyCell type="value" heading>
-							VALUE
-						</PrettyCell>
+				<div
+					role="grid"
+					{...divProps}
+					className={clsx(themeClass, divProps.className)}
+				>
+					<div role="rowgroup">
+						<div role="row" className={styles.flex}>
+							<PrettyCell className={styles.tableHeading} type="label" heading>
+								{fieldLabel}
+							</PrettyCell>
+							<PrettyCell type="value" heading>
+								{valueLabel}
+							</PrettyCell>
+						</div>
 					</div>
-					{formattedJson.map((item) => (
-						<PrettyJsonNode node={item} key={item.path} />
-					))}
+					<div role="rowgroup">
+						{formattedJson.map((item) => (
+							<PrettyJsonNode
+								node={item}
+								rootId={ensuredId}
+								renderValue={renderValue}
+								key={item.path}
+							/>
+						))}
+					</div>
 				</div>
 			</DispatchToggleContext.Provider>
 		</RerenderContext.Provider>
 	);
 };
 
-const PrettyJsonNode = ({ node }: { node: JsonNode }) => {
+const PrettyJsonNode = ({
+	node,
+	rootId,
+	renderValue,
+	...divProps
+}: {
+	node: JsonNode;
+	rootId: string;
+	renderValue: (value: string) => React.ReactNode;
+} & React.ComponentPropsWithoutRef<'div'>) => {
 	const isStriped = node.index % 2 === 1;
 
 	const toggle = React.useContext(DispatchToggleContext);
 	const rerender = React.useContext(RerenderContext);
 
-	React.useLayoutEffect(() => {
+	React.useEffect(() => {
 		if (isDefined(node.expanded)) {
 			// force rerender in order for the connector calculation to be correct
 			rerender();
@@ -72,22 +106,32 @@ const PrettyJsonNode = ({ node }: { node: JsonNode }) => {
 		};
 	};
 
+	const sectionId = isDefined(node.expanded) ? `${rootId}.${node.path}` : '';
+
 	return isDefined(node.expanded) ? (
-		<div className={position.relative}>
-			<button
-				onClick={() => toggle(node.path)}
-				className={cx(
-					styles.toggleBtn,
+		<div {...divProps} className={position.relative}>
+			<div
+				role="row"
+				className={clsx(
 					styles.row,
 					isStriped ? styles.stripeRow.dark : styles.stripeRow.white
 				)}
-				type="button"
 			>
-				<div className={cx(styles.flex, styles.padByLevel[node.level])}>
-					<PrettyCell className={styles.toggleCell} type="label">
-						<div className={styles.flexCenter}>
+				<div className={clsx(styles.flex, styles.padByLevel[node.level])}>
+					<PrettyCell
+						className={styles.toggleCell}
+						type="value"
+						aria-colspan={2}
+					>
+						<button
+							onClick={() => toggle(node.path)}
+							className={styles.toggleBtn}
+							type="button"
+							aria-expanded={node.expanded}
+							aria-controls={sectionId}
+						>
 							<div
-								className={cx(
+								className={clsx(
 									styles.toggleIconWrapper.default,
 									node.level > 0 && styles.toggleIconWrapper.nonRoot
 								)}
@@ -102,23 +146,23 @@ const PrettyJsonNode = ({ node }: { node: JsonNode }) => {
 								/>
 							</div>
 							{node.label}
-						</div>
-					</PrettyCell>
-					<PrettyCell
-						type="value"
-						className={styles.offsetPaddingByLabel[node.level]}
-					>
-						{node.value}
+						</button>
 					</PrettyCell>
 				</div>
-			</button>
+			</div>
 			{node.expanded && node.children && (
 				<>
 					{node.children.map((child) => (
-						<PrettyJsonNode node={child} key={child.path} />
+						<PrettyJsonNode
+							node={child}
+							rootId={rootId}
+							id={sectionId}
+							renderValue={renderValue}
+							key={child.path}
+						/>
 					))}
 					<div
-						className={cx(
+						className={clsx(
 							styles.connectorWrapper.base,
 							node.level > 0
 								? styles.connectorWrapper.nonRoot
@@ -133,15 +177,17 @@ const PrettyJsonNode = ({ node }: { node: JsonNode }) => {
 		</div>
 	) : (
 		<div
-			className={cx(
+			{...divProps}
+			className={clsx(
 				styles.row,
 				isStriped ? styles.stripeRow.dark : styles.stripeRow.white
 			)}
+			role="row"
 		>
-			<div className={cx(styles.flex, styles.padByLevel[node.level])}>
+			<div className={clsx(styles.flex, styles.padByLevel[node.level])}>
 				<PrettyCell
 					type="label"
-					className={cx(
+					className={clsx(
 						node.level > 0
 							? styles.nodeCell.nonFirstLevel
 							: styles.nodeCell.firstLevel
@@ -151,9 +197,9 @@ const PrettyJsonNode = ({ node }: { node: JsonNode }) => {
 				</PrettyCell>
 				<PrettyCell
 					type="value"
-					className={cx(styles.offsetPaddingByLabel[node.level])}
+					className={clsx(styles.offsetPaddingByLabel[node.level])}
 				>
-					{node.value}
+					{renderValue(node.value)}
 				</PrettyCell>
 			</div>
 		</div>
@@ -206,6 +252,7 @@ const Connectors = ({
 				top: anchorRect.height,
 				width,
 			}}
+			aria-hidden
 		>
 			{kids.map((kid, i) => {
 				if (kid === lastChild) {
@@ -278,24 +325,30 @@ const DispatchToggleContext = createNamedContext<React.Dispatch<string>>(
 
 const RerenderContext = createNamedContext<() => void>('Rerender', noop);
 
-const PrettyCell = (props: {
-	className?: string;
+const PrettyCell = ({
+	children,
+	heading,
+	type,
+	...props
+}: {
 	children: React.ReactNode;
 	heading?: boolean;
 	type: 'label' | 'value';
-}) => (
+} & React.ComponentPropsWithoutRef<'div'>) => (
 	<div
-		className={cx(
+		role={heading ? 'columnheader' : 'cell'}
+		{...props}
+		className={clsx(
 			styles.prettyCell,
-			props.type === 'label'
+			type === 'label'
 				? styles.prettyCellByType.label
 				: styles.prettyCellByType.nonLabel,
-			props.heading
+			heading
 				? styles.prettyCellByType.heading
 				: styles.prettyCellByType.nonHeading,
 			props.className
 		)}
 	>
-		{props.children}
+		{children}
 	</div>
 );

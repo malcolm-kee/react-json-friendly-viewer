@@ -2,11 +2,11 @@ import * as React from 'react';
 import { titleCase } from 'title-case';
 import { prettifyLabel } from './lib/prettify-label';
 import { isEmptyObject, isNil, isPrimitive } from './lib/type-guard';
-import { Formatter, JSONValue, JsonArray, JsonObject } from './types';
+import { Formatter, JsonArray, JsonObject, JSONValue } from './types';
 
 export type JsonNode = {
 	label: string;
-	value: string | number;
+	value: string;
 	index: number;
 	level: number;
 	path: string;
@@ -28,9 +28,11 @@ export const formatJson = (
 	expandedPaths: string[],
 	{
 		formatter: providedFormatter = {},
+		mergePrimitiveArray,
 	}: {
 		formatter?: Partial<Formatter>;
-	} = {}
+		mergePrimitiveArray: boolean;
+	}
 ): JsonNode[] => {
 	if (isValue(value)) {
 		return [];
@@ -53,10 +55,10 @@ export const formatJson = (
 	) {
 		if (Array.isArray(value)) {
 			value.forEach((item, index) => {
-				const label = formatter.field({ type: 'arrayItem', index, parentName });
+				const label = formatter.arrayItem(index, parentName);
 				const path = `${parentPath}.${label}`;
 
-				const parsed = parseValue(item, formatter);
+				const parsed = parseValue(item, formatter, mergePrimitiveArray);
 
 				if (parsed.hasMore) {
 					const expanded = expandedPaths.includes(path);
@@ -93,14 +95,10 @@ export const formatJson = (
 			});
 		} else {
 			Object.entries(value).forEach(([key, val]) => {
-				const label = formatter.field({
-					type: 'prop',
-					name: key,
-					parentName,
-				});
+				const label = formatter.prop(key, parentName);
 				const path = `${parentPath}.${label}`;
 
-				const parsed = parseValue(val, formatter);
+				const parsed = parseValue(val, formatter, mergePrimitiveArray);
 
 				if (parsed.hasMore) {
 					const expanded = expandedPaths.includes(path);
@@ -141,36 +139,34 @@ const defaultFormatter: Formatter = {
 	string: (value) => value,
 	number: (value) => String(value),
 	boolean: (value) => titleCase(String(value)),
-	field: (data) =>
-		data.type === 'prop' ? prettifyLabel(data.name) : `Item ${data.index + 1}`,
+	none: () => '-',
+	prop: prettifyLabel,
+	arrayItem: (index) => `Item ${index + 1}`,
 };
 
 const parseValue = (
 	value: JSONValue | undefined,
-	formatter: Formatter
+	formatter: Formatter,
+	mergePrimitiveArray: boolean
 ): {
-	value: string | number;
+	value: string;
 	hasMore: boolean;
 } => {
 	if (isEmpty(value)) {
-		return { value: '-', hasMore: false };
+		return { value: formatter.none(), hasMore: false };
 	}
 
 	if (Array.isArray(value)) {
 		if (value.length === 0 || value.every(isEmpty)) {
 			return {
-				value: '-',
+				value: formatter.none(),
 				hasMore: false,
 			};
 		}
 
-		if (value.every(isPrimitive)) {
+		if (mergePrimitiveArray && value.every(isPrimitive)) {
 			return {
-				value: value
-					.map((item) =>
-						typeof item === 'boolean' ? titleCase(String(item)) : item
-					)
-					.join(', '),
+				value: value.map(formatValue).join(', '),
 				hasMore: false,
 			};
 		}
@@ -183,19 +179,31 @@ const parseValue = (
 
 	switch (typeof value) {
 		case 'string':
-			return { value: formatter.string(value), hasMore: false };
-
 		case 'number':
-			return { value: formatter.number(value), hasMore: false };
-
 		case 'boolean':
-			return { value: formatter.boolean(value), hasMore: false };
+			return { value: formatValue(value), hasMore: false };
 
 		case 'object':
 			return { value: '', hasMore: true };
 
 		default:
 			return { value: '', hasMore: false };
+	}
+
+	function formatValue(value: string | boolean | number) {
+		switch (typeof value) {
+			case 'string':
+				return formatter.string(value);
+
+			case 'number':
+				return formatter.number(value);
+
+			case 'boolean':
+				return formatter.boolean(value);
+
+			default:
+				return '';
+		}
 	}
 };
 
