@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.4.0
+
+### Minor Changes
+
+- 1575d0c: Add more customization options
+
 ## 0.3.0
 
 ### Minor Changes
