@@ -12,8 +12,8 @@ import type * as types from '../types';
 import * as styles from './json-pretty-viewer.css';
 
 export interface JsonPrettyViewerProps {
-	json: types.JSONValue;
-	formatter?: Partial<types.ValueFormatter>;
+	json: any;
+	formatter?: Partial<types.Formatter>;
 }
 
 export const JsonPrettyViewer = ({

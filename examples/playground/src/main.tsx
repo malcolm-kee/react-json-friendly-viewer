@@ -1,6 +1,10 @@
 import { format as formatDate } from 'date-fns';
 import { createRoot } from 'react-dom/client';
-import { JsonPrettyViewer, ValueFormatter } from 'react-json-friendly-viewer';
+import {
+	JsonPrettyViewer,
+	Formatter,
+	prettifyLabel,
+} from 'react-json-friendly-viewer';
 import 'react-json-friendly-viewer/style.css';
 
 const data = {
@@ -24,14 +28,37 @@ const data = {
 
 const datePattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
 
-const formatter: Partial<ValueFormatter> = {
+const formatter: Partial<Formatter> = {
 	string: (value: string) => {
 		return datePattern.test(value)
 			? formatDate(new Date(value), 'd MMM yyyy, h:mm a')
 			: value;
 	},
+	field: (data) =>
+		data.type === 'arrayItem'
+			? prettifyLabel(`${data.parentName || 'Item'} ${data.index + 1}`)
+			: prettifyLabel(data.name),
+};
+
+interface CustomData {
+	firstName: string;
+	lastName: string;
+}
+
+const customer: CustomData = {
+	firstName: 'Malcolm',
+	lastName: 'Kee',
 };
 
 createRoot(document.getElementById('root') as HTMLElement).render(
-	<JsonPrettyViewer json={data} formatter={formatter} />
+	<div
+		style={{
+			display: 'flex',
+			flexDirection: 'column',
+			gap: 8,
+		}}
+	>
+		<JsonPrettyViewer json={data} formatter={formatter} />
+		<JsonPrettyViewer json={customer} />
+	</div>
 );
