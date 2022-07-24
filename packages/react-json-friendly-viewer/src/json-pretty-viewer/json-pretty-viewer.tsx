@@ -276,13 +276,6 @@ const DispatchToggleContext = createNamedContext<React.Dispatch<string>>(
 	noop
 );
 
-// interface JsonDescendant extends Descendant {
-// 	isButton: boolean;
-// }
-
-// const DescendantContext =
-// 	createDescendantContext<JsonDescendant>('TreeDescentdant');
-
 const RerenderContext = createNamedContext<() => void>('Rerender', noop);
 
 const PrettyCell = (props: {
@@ -306,9 +299,3 @@ const PrettyCell = (props: {
 		{props.children}
 	</div>
 );
-
-// const datePattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
-
-// const formatIfDate = (value: string | number) =>
-// 	// TODO
-// 	isString(value) && datePattern.test(value) ? value : value;
