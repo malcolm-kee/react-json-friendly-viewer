@@ -108,6 +108,7 @@ export const nodeCell = styleVariants({
 
 export const toggleCell = style({
 	paddingLeft: spacing[7],
+	flex: 1,
 });
 
 export const prettyCellByType = styleVariants({
