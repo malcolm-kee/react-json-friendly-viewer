@@ -15,6 +15,7 @@
 		"clean": "pnpm -r run clean"
 	},
 	"devDependencies": {
+		"@changesets/cli": "^2.24.0",
 		"netlify-cli": "^10.11.1",
 		"prettier": "^2.7.1",
 		"rimraf": "^3.0.2"
