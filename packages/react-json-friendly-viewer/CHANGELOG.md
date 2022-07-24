@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.4.1
+
+### Patch Changes
+
+- c14f652: Fix style regression
+
 ## 0.4.0
 
 ### Minor Changes
