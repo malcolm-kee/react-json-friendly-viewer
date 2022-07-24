@@ -1,4 +1,10 @@
-# react-json-friendly-viewer
+# CHANGELOG
+
+## 0.3.0
+
+### Minor Changes
+
+- e4f80b3: Allow customize field display
 
 ## 0.2.0
 
