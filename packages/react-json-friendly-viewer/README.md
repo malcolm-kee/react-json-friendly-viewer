@@ -8,10 +8,11 @@ npm install react-json-friendly-viewer
 
 ## Usage
 
-Import the component and pass any json object to `json` props.
+Import the component and included CSS:
 
 ```jsx
 import { JsonPrettyViewer } from 'react-json-friendly-viewer';
+import 'react-json-friendly-viewer/style.css';
 
 <JsonPrettyViewer
 	json={{
@@ -35,6 +36,6 @@ import { JsonPrettyViewer } from 'react-json-friendly-viewer';
 />;
 ```
 
-The following table will be displayed.
+The following table will be displayed:
 
 ![Display result of code above](docs/screenshot.png)
