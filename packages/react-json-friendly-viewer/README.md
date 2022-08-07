@@ -2,7 +2,7 @@
 
 Beautifully display your JSON data for everyone.
 
-[Demo](https://react-json-friendly-viewer.netlify.app/)
+[Documentations](https://react-json-friendly-viewer.netlify.app/)
 
 ```bash
 npm install react-json-friendly-viewer
@@ -40,7 +40,3 @@ import 'react-json-friendly-viewer/style.css';
 	}}
 />;
 ```
-
-The following table will be displayed:
-
-![Display result of code above](docs/screenshot.png)
