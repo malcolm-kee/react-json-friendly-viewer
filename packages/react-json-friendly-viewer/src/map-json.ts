@@ -2,7 +2,7 @@ import * as React from 'react';
 import { titleCase } from 'title-case';
 import { prettifyLabel } from './lib/prettify-label';
 import { isEmptyObject, isNil, isPrimitive } from './lib/type-guard';
-import { Formatter, JsonArray, JsonObject, JSONValue } from './types';
+import type * as types from './types';
 
 export type JsonNode = {
 	label: string;
@@ -18,19 +18,20 @@ export type JsonNode = {
 	children?: Array<JsonNode>;
 };
 
-const isValue = (value: JSONValue): value is string | number | boolean | null =>
-	!value || isPrimitive(value);
+const isValue = (
+	value: types.JSONValue
+): value is string | number | boolean | null => !value || isPrimitive(value);
 
-type JsonObjectOrArray = JsonObject | JsonArray;
+type JsonObjectOrArray = types.JsonObject | types.JsonArray;
 
 export const formatJson = (
-	value: JSONValue,
+	value: types.JSONValue,
 	expandedPaths: string[],
 	{
 		formatter: providedFormatter = {},
 		mergePrimitiveArray,
 	}: {
-		formatter?: Partial<Formatter>;
+		formatter?: Partial<types.Formatter>;
 		mergePrimitiveArray: boolean;
 	}
 ): JsonNode[] => {
@@ -58,7 +59,11 @@ export const formatJson = (
 				const label = formatter.arrayItem(index, parentName);
 				const path = `${parentPath}.${label}`;
 
-				const parsed = parseValue(item, formatter, mergePrimitiveArray);
+				const parsed = parseValue(item, formatter, mergePrimitiveArray, {
+					type: 'arrayItem',
+					index,
+					parentName,
+				});
 
 				if (parsed.hasMore) {
 					const expanded = expandedPaths.includes(path);
@@ -98,7 +103,11 @@ export const formatJson = (
 				const label = formatter.prop(key, parentName);
 				const path = `${parentPath}.${label}`;
 
-				const parsed = parseValue(val, formatter, mergePrimitiveArray);
+				const parsed = parseValue(val, formatter, mergePrimitiveArray, {
+					type: 'prop',
+					name: key,
+					parentName,
+				});
 
 				if (parsed.hasMore) {
 					const expanded = expandedPaths.includes(path);
@@ -135,7 +144,7 @@ export const formatJson = (
 	return result;
 };
 
-const defaultFormatter: Formatter = {
+const defaultFormatter: types.Formatter = {
 	string: (value) => value,
 	number: (value) => String(value),
 	boolean: (value) => titleCase(String(value)),
@@ -145,21 +154,22 @@ const defaultFormatter: Formatter = {
 };
 
 const parseValue = (
-	value: JSONValue | undefined,
-	formatter: Formatter,
-	mergePrimitiveArray: boolean
+	value: types.JSONValue | undefined,
+	formatter: types.Formatter,
+	mergePrimitiveArray: boolean,
+	fieldData: types.FieldData
 ): {
 	value: string;
 	hasMore: boolean;
 } => {
 	if (isEmpty(value)) {
-		return { value: formatter.none(), hasMore: false };
+		return { value: formatter.none(fieldData), hasMore: false };
 	}
 
 	if (Array.isArray(value)) {
 		if (value.length === 0 || value.every(isEmpty)) {
 			return {
-				value: formatter.none(),
+				value: formatter.none(fieldData),
 				hasMore: false,
 			};
 		}
@@ -193,13 +203,13 @@ const parseValue = (
 	function formatValue(value: string | boolean | number) {
 		switch (typeof value) {
 			case 'string':
-				return formatter.string(value);
+				return formatter.string(value, fieldData);
 
 			case 'number':
-				return formatter.number(value);
+				return formatter.number(value, fieldData);
 
 			case 'boolean':
-				return formatter.boolean(value);
+				return formatter.boolean(value, fieldData);
 
 			default:
 				return '';
@@ -207,5 +217,5 @@ const parseValue = (
 	}
 };
 
-const isEmpty = (value: JSONValue | undefined) =>
+const isEmpty = (value: types.JSONValue | undefined) =>
 	isNil(value) || value === '' || isEmptyObject(value);

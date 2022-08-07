@@ -4,7 +4,6 @@ import * as React from 'react';
 import { position, srOnly } from '../helper.css';
 import { createNamedContext } from '../lib/create-named-context';
 import { noop } from '../lib/fn-lib';
-import { ToggleIcon } from '../lib/toggle-icon';
 import { isDefined, isNil } from '../lib/type-guard';
 import { useForceUpdate } from '../lib/use-force-update';
 import { formatJson, JsonNode } from '../map-json';
@@ -20,8 +19,14 @@ export interface JsonPrettyViewerProps
 	valueLabel?: string;
 	mergePrimitiveArray?: boolean;
 	renderValue?: (value: string) => React.ReactNode;
+	renderToggleIcon?: (expanded: boolean) => React.ReactNode;
 }
 
+/**
+ * Displays any json data in user-friendly table.
+ *
+ * Unspecified props will be spreaded to the underlying `div` element.
+ */
 export const JsonPrettyViewer = ({
 	json,
 	formatter,
@@ -29,6 +34,7 @@ export const JsonPrettyViewer = ({
 	renderValue = (val) => val,
 	fieldLabel = 'FIELD',
 	valueLabel = 'VALUE',
+	renderToggleIcon = defaultRenderToggleIcon,
 	...divProps
 }: JsonPrettyViewerProps) => {
 	const ensuredId = useId(divProps.id);
@@ -67,6 +73,7 @@ export const JsonPrettyViewer = ({
 								node={item}
 								rootId={ensuredId}
 								renderValue={renderValue}
+								renderToggleIcon={renderToggleIcon}
 								key={item.path}
 							/>
 						))}
@@ -81,11 +88,13 @@ const PrettyJsonNode = ({
 	node,
 	rootId,
 	renderValue,
+	renderToggleIcon,
 	...divProps
 }: {
 	node: JsonNode;
 	rootId: string;
 	renderValue: (value: string) => React.ReactNode;
+	renderToggleIcon: (expanded: boolean) => React.ReactNode;
 } & React.ComponentPropsWithoutRef<'div'>) => {
 	const isStriped = node.index % 2 === 1;
 
@@ -138,12 +147,22 @@ const PrettyJsonNode = ({
 								ref={setRef}
 							>
 								<span className={srOnly}>Toggle</span>
-								<ToggleIcon
-									icon={node.expanded ? 'minus' : 'plus'}
+								<svg
+									className={clsx(
+										styles.toggleIcon,
+										node.expanded && styles.toggleIconExpanded
+									)}
 									width={20}
 									height={20}
-									className={styles.toggleIcon}
-								/>
+									viewBox="0 0 20 20"
+									fill="currentColor"
+								>
+									<path
+										fillRule="evenodd"
+										d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+										clipRule="evenodd"
+									/>
+								</svg>
 							</div>
 							{node.label}
 						</button>
@@ -158,6 +177,7 @@ const PrettyJsonNode = ({
 							rootId={rootId}
 							id={sectionId}
 							renderValue={renderValue}
+							renderToggleIcon={renderToggleIcon}
 							key={child.path}
 						/>
 					))}
@@ -205,6 +225,26 @@ const PrettyJsonNode = ({
 		</div>
 	);
 };
+
+const defaultRenderToggleIcon = (expanded: boolean) => (
+	<ToggleIcon expanded={expanded} />
+);
+
+const ToggleIcon = ({ expanded }: { expanded: boolean }) => (
+	<svg
+		className={clsx(styles.toggleIcon, expanded && styles.toggleIconExpanded)}
+		width={20}
+		height={20}
+		viewBox="0 0 20 20"
+		fill="currentColor"
+	>
+		<path
+			fillRule="evenodd"
+			d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+			clipRule="evenodd"
+		/>
+	</svg>
+);
 
 const Connectors = ({
 	node,
@@ -339,7 +379,6 @@ const PrettyCell = ({
 		role={heading ? 'columnheader' : 'cell'}
 		{...props}
 		className={clsx(
-			styles.prettyCell,
 			type === 'label'
 				? styles.prettyCellByType.label
 				: styles.prettyCellByType.nonLabel,
