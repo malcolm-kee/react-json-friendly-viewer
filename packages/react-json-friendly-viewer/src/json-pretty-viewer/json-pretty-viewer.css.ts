@@ -47,8 +47,7 @@ export const toggleIconWrapper = styleVariants({
 	default: {
 		marginRight: spacing[1],
 		marginBlock: `-1px`,
-		color: vars.colors.white,
-		background: vars.colors['gray-400'],
+		color: vars.colors['gray-400'],
 		borderRadius: '0.25rem',
 		'@media': {
 			[media.sm]: {
@@ -63,6 +62,11 @@ export const toggleIconWrapper = styleVariants({
 
 export const toggleIcon = style({
 	display: 'block',
+	transition: 'transform 150ms ease-in-out',
+});
+
+export const toggleIconExpanded = style({
+	transform: 'rotate(90deg)',
 });
 
 const createPadding = (level: number) => ({
@@ -92,10 +96,6 @@ export const offsetPaddingByLabel = styleVariants({
 	5: createOffset(5),
 	6: createOffset(6),
 }) as Record<number, string>;
-
-export const prettyCell = style({
-	color: vars.colors['gray-500'],
-});
 
 export const nodeCell = styleVariants({
 	firstLevel: {

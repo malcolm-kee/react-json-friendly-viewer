@@ -115,6 +115,14 @@ const formatter: Partial<Formatter> = {
 	arrayItem: (index, parentName) =>
 		prettifyLabel(`${parentName || 'Item'} ${index + 1}`),
 	none: () => `(None)`,
+	boolean: (value, data) =>
+		data.type === 'prop' && data.name === 'private'
+			? value
+				? 'Private'
+				: 'Public'
+			: value
+			? 'Yes'
+			: 'No',
 };
 
 <JsonPrettyViewer
@@ -122,6 +130,7 @@ const formatter: Partial<Formatter> = {
 	json={{
 		name: 'react-json-friendly-viewer',
 		private: false,
+		deprecated: true,
 		changes: 1000,
 		dependencies: {
 			react: 'latest',
