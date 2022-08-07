@@ -33,11 +33,13 @@ const fontSize = {
 	'4xl': '2.25rem',
 };
 
-export const [themeClass, vars] = createTheme({
+const themeTokens = {
 	colors,
 	spacing,
 	fontSize,
-});
+};
+
+export const [themeClass, vars] = createTheme(themeTokens);
 
 globalStyle(`${themeClass} *`, {
 	boxSizing: 'border-box',
