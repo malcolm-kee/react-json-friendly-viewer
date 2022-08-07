@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.5.0
+
+### Minor Changes
+
+- ae2083e: Add more documentations
+
 ## 0.4.1
 
 ### Patch Changes
