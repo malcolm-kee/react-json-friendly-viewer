@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.6.0
+
+### Minor Changes
+
+- 4e8a422: Allow customize icon and more info exposed in formatter
+
 ## 0.5.0
 
 ### Minor Changes
