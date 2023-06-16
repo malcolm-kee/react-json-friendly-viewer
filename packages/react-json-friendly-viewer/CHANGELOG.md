@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.7.0
+
+### Minor Changes
+
+- 02ea226: Bump dependencies
+
 ## 0.6.0
 
 ### Minor Changes
