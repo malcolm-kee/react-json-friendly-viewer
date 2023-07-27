@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.8.0
+
+### Minor Changes
+
+- ba5d3c7: Replace "id" with "ID"
+
 ## 0.7.0
 
 ### Minor Changes
