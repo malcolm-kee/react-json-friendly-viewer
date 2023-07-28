@@ -4,6 +4,8 @@ import 'react-json-friendly-viewer/style.css';
 import { AllCustomizationExample } from './all-customization';
 
 interface CustomData {
+	id: number;
+	studentId?: string;
 	firstName: string;
 	lastName: string;
 	age?: number | null;
@@ -12,12 +14,15 @@ interface CustomData {
 }
 
 const customer: CustomData = {
+	id: 1,
+	studentId: 'S1',
 	firstName: 'Malcolm',
 	lastName: 'Kee',
 	age: null,
 	hobbies: ['reading', 'eating'],
 	friends: [
 		{
+			id: 2,
 			firstName: 'Pika',
 			lastName: 'Chu',
 			age: 30,
