@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.8.1
+
+### Patch Changes
+
+- 4935ef3: Update regex placement
+
 ## 0.8.0
 
 ### Minor Changes

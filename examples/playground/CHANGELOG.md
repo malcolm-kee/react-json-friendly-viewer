@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 0.1.8
+
+### Patch Changes
+
+- 4935ef3: Update regex placement
+- Updated dependencies [4935ef3]
+  - react-json-friendly-viewer@0.8.1
+
 ## 0.1.7
 
 ### Patch Changes
