@@ -16,9 +16,9 @@
 		"build:docs": "pnpm -r run showroom:build"
 	},
 	"devDependencies": {
-		"@changesets/cli": "^2.26.1",
-		"netlify-cli": "^15.6.0",
-		"prettier": "^2.8.8",
-		"rimraf": "^5.0.1"
+		"@changesets/cli": "^2.27.1",
+		"netlify-cli": "^17.22.1",
+		"prettier": "^3.2.5",
+		"rimraf": "^5.0.5"
 	}
 }
