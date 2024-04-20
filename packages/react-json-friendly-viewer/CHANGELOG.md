@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.0.0
+
+### Major Changes
+
+- 10e5e7e: Fix package.json and release v1
+
 ## 0.8.1
 
 ### Patch Changes
