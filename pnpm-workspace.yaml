@@ -1,3 +1,13 @@
 packages:
   - examples/*
   - packages/*
+
+onlyBuiltDependencies:
+  - '@parcel/watcher'
+  - core-js-pure
+  - deasync
+  - esbuild
+  - netlify-cli
+  - sharp
+  - unix-dgram
+  - unrs-resolver

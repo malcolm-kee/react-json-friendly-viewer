@@ -5,6 +5,7 @@ import {
 	JsonPrettyViewer,
 	prettifyLabel,
 } from 'react-json-friendly-viewer';
+import darkThemeStyles from './dark-theme.module.css';
 
 const data = {
 	name: 'react-json-friendly-viewer',
@@ -58,6 +59,7 @@ export const AllCustomizationExample = () => {
 		false
 	);
 	const [customRender, toggleCustomRender] = React.useReducer((o) => !o, true);
+	const [isDarkTheme, toggleDarkTheme] = React.useReducer((o) => !o, false);
 
 	return (
 		<div>
@@ -96,6 +98,14 @@ export const AllCustomizationExample = () => {
 						{customRender ? 'True' : 'False'}
 					</button>
 				</div>
+				<label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+					<span>Dark theme</span>
+					<input
+						type="checkbox"
+						checked={isDarkTheme}
+						onChange={toggleDarkTheme}
+					/>
+				</label>
 			</div>
 			<JsonPrettyViewer
 				json={data}
@@ -103,6 +113,7 @@ export const AllCustomizationExample = () => {
 				fieldLabel={fieldLabel}
 				valueLabel={valueLabel}
 				mergePrimitiveArray={mergePrimitiveArray}
+				className={isDarkTheme ? darkThemeStyles.viewer : undefined}
 				renderValue={
 					customRender
 						? (value) => (
@@ -117,7 +128,7 @@ export const AllCustomizationExample = () => {
 								>
 									{value}
 								</span>
-						  )
+							)
 						: undefined
 				}
 			/>

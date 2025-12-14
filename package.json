@@ -17,8 +17,8 @@
 	},
 	"devDependencies": {
 		"@changesets/cli": "^2.27.1",
-		"netlify-cli": "^17.22.1",
+		"netlify-cli": "^23.12.3",
 		"prettier": "^3.2.5",
-		"rimraf": "^5.0.5"
+		"rimraf": "^6.1.2"
 	}
 }

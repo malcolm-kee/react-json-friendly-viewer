@@ -11,8 +11,7 @@ import { themeClass } from '../theme.css';
 import type * as types from '../types';
 import * as styles from './json-pretty-viewer.css';
 
-export interface JsonPrettyViewerProps
-	extends React.ComponentPropsWithoutRef<'div'> {
+export interface JsonPrettyViewerProps extends React.ComponentPropsWithoutRef<'div'> {
 	json: any;
 	formatter?: Partial<types.Formatter>;
 	fieldLabel?: string;
@@ -25,7 +24,7 @@ export interface JsonPrettyViewerProps
 /**
  * Displays any json data in user-friendly table.
  *
- * Unspecified props will be spreaded to the underlying `div` element.
+ * Unspecified props will be spread to the underlying `div` element.
  */
 export const JsonPrettyViewer = ({
 	json,
