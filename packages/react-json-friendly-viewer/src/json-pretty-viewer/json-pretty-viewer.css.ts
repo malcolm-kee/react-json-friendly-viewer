@@ -15,16 +15,16 @@ export const tableHeading = style({
 export const row = style({
 	width: '100%',
 	':hover': {
-		backgroundColor: vars.colors['gray-100'],
+		backgroundColor: vars.colors['row-background-hover'],
 	},
 });
 
 export const stripeRow = styleVariants({
 	white: {
-		backgroundColor: vars.colors.white,
+		backgroundColor: vars.colors['row-background-even'],
 	},
 	dark: {
-		backgroundColor: vars.colors['gray-50'],
+		backgroundColor: vars.colors['row-background-odd'],
 	},
 });
 
@@ -47,7 +47,7 @@ export const toggleIconWrapper = styleVariants({
 	default: {
 		marginRight: spacing[1],
 		marginBlock: `-1px`,
-		color: vars.colors['gray-400'],
+		color: vars.colors['icon-color'],
 		borderRadius: '0.25rem',
 		'@media': {
 			[media.sm]: {
@@ -136,9 +136,9 @@ export const prettyCellByType = styleVariants({
 	heading: {
 		paddingBlock: spacing[3],
 		borderBottomWidth: 1,
-		borderBottomColor: vars.colors['gray-200'],
+		borderBottomColor: vars.colors['heading-border'],
 		fontSize: vars.fontSize.xs,
-		backgroundColor: vars.colors['gray-100'],
+		backgroundColor: vars.colors['heading-background'],
 		fontWeight: '500',
 		lineHeight: '1rem',
 		letterSpacing: '0.025em',
@@ -166,5 +166,5 @@ export const connectorWrapper = styleVariants({
 });
 
 export const connector = style({
-	color: vars.colors['gray-400'],
+	color: vars.colors['icon-color'],
 });

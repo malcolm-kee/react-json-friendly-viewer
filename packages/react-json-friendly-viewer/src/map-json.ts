@@ -217,5 +217,5 @@ const parseValue = (
 	}
 };
 
-const isEmpty = (value: types.JSONValue | undefined) =>
+const isEmpty = (value: types.JSONValue | undefined): boolean =>
 	isNil(value) || value === '' || isEmptyObject(value);

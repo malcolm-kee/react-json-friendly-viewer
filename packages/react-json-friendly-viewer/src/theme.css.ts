@@ -1,12 +1,16 @@
-import { createTheme, globalStyle } from '@vanilla-extract/css';
+import {
+	createGlobalThemeContract,
+	createTheme,
+	globalStyle,
+} from '@vanilla-extract/css';
 
 const colors = {
-	white: '#ffffff',
-	'gray-50': '#f8fafc',
-	'gray-100': '#f1f5f9',
-	'gray-200': '#e2e8f0',
-	'gray-400': '#94a3b8',
-	'gray-500': '#64748b',
+	'row-background-even': '#ffffff',
+	'row-background-odd': '#f8fafc',
+	'row-background-hover': '#f1f5f9',
+	'heading-background': '#f1f5f9',
+	'heading-border': '#e2e8f0',
+	'icon-color': '#94a3b8',
 };
 
 const spacing = {
@@ -39,7 +43,15 @@ const themeTokens = {
 	fontSize,
 };
 
-export const [themeClass, vars] = createTheme(themeTokens);
+// Create theme contract with predictable variable names (no hashing)
+// Using createGlobalThemeContract with a mapper function to generate constant variable names
+export const vars = createGlobalThemeContract(themeTokens, (_value, path) =>
+	path.join('-')
+);
+
+// Create a scoped theme with a hashed class name but predictable variable names
+// The hashed class provides scoping while the constant variable names allow user overrides
+export const themeClass = createTheme(vars, themeTokens);
 
 globalStyle(`${themeClass} *`, {
 	boxSizing: 'border-box',

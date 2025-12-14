@@ -7,7 +7,7 @@
 		"json viewer"
 	],
 	"peerDependencies": {
-		"react": "^16.8.0 || 17.x || 18.x"
+		"react": "^16.8.0 || 17.x || 18.x || 19.x"
 	},
 	"main": "./dist/react-json-friendly-viewer.js",
 	"types": "./dist/react-json-friendly-viewer.d.ts",
@@ -23,7 +23,7 @@
 				"default": "./dist/react-json-friendly-viewer.js"
 			}
 		},
-		"./style.css": "./dist/style.css"
+		"./style.css": "./dist/react-json-friendly-viewer.css"
 	},
 	"repository": {
 		"type": "git",
@@ -35,26 +35,26 @@
 		"dev": "vite build --watch",
 		"test": "jest",
 		"test:ci": "jest --runInBand --ci --coverage",
-		"clean": "rimraf dist coverage",
+		"clean": "rimraf dist coverage .showroom_cache",
 		"showroom:dev": "react-showroom dev",
 		"showroom:build": "react-showroom build"
 	},
 	"devDependencies": {
-		"@testing-library/react": "^15.0.2",
-		"@types/jest": "^29.5.12",
-		"@types/react": "^18.2.79",
+		"@testing-library/react": "^16.3.0",
+		"@types/jest": "^30.0.0",
+		"@types/react": "^19.2.7",
 		"@vanilla-extract/css": "^1.14.2",
-		"@vanilla-extract/vite-plugin": "^4.0.7",
+		"@vanilla-extract/vite-plugin": "^5.1.3",
 		"@vanilla-extract/webpack-plugin": "^2.3.7",
-		"@vitejs/plugin-react": "^4.2.1",
-		"date-fns": "^3.6.0",
-		"react": "^18.2.0",
-		"react-dom": "^18.2.0",
+		"@vitejs/plugin-react": "^5.1.2",
+		"date-fns": "^4.1.0",
+		"react": "^19.2.3",
+		"react-dom": "^19.2.3",
 		"react-showroom": "^2.4.1",
 		"ts-jest": "^29.1.2",
 		"typescript": "^5.4.5",
-		"vite": "^5.2.10",
-		"vite-plugin-dts": "^3.8.3"
+		"vite": "^7.2.7",
+		"vite-plugin-dts": "^4.5.4"
 	},
 	"author": {
 		"name": "Malcolm Kee",
@@ -69,6 +69,6 @@
 	"dependencies": {
 		"@radix-ui/react-id": "^1.0.1",
 		"clsx": "^2.1.0",
-		"title-case": "^3.0.3"
+		"title-case": "^4.3.2"
 	}
 }

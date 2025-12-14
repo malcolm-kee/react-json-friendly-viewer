@@ -1,0 +1,10 @@
+.viewer {
+	--colors-row-background-even: #1e293b;
+	--colors-row-background-odd: #0f172a;
+	--colors-row-background-hover: #334155;
+	--colors-heading-background: #334155;
+	--colors-heading-border: #475569;
+	--colors-icon-color: #cbd5e1;
+
+	color: white;
+}
