@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 0.1.10
+
+### Patch Changes
+
+- Updated dependencies [d719270]
+  - react-json-friendly-viewer@1.1.0
+
 ## 0.1.9
 
 ### Patch Changes
